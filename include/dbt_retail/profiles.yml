@@ -1,7 +1,6 @@
-# include/dbt_retail/profiles.yml
 retail_duckdb:
   target: dev
   outputs:
     dev:
       type: duckdb
-      path: /usr/local/airflow/include/data/retail.duckdb
+      path: "{{ env_var('DUCKDB_PATH', '/usr/local/airflow/include/data/retail.duckdb') }}"

@@ -1,5 +1,5 @@
 with source as (
-    select * from {{ source('landing', 'raw_transactions') }}
+    select * from {{ source('landing', 'marketplace_transactions') }}
 ),
 
 renamed as (
@@ -12,7 +12,8 @@ renamed as (
         product_category,
         quantity::int as quantity,
         unit_price::decimal(10,2) as unit_price,
-        (quantity * unit_price)::decimal(10,2) as total_amount
+        (quantity * unit_price)::decimal(10,2) as total_amount,
+        'MARKETPLACE' as channel
     from source
 )
 

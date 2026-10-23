@@ -1,5 +1,15 @@
-with transactions as (
-    select * from {{ ref('stg_transactions') }}
+with pos_transactions as (
+    select * from {{ ref('stg_pos_transactions') }}
+),
+
+marketplace_transactions as (
+    select * from {{ ref('stg_marketplace_transactions') }}
+),
+
+all_transactions as (
+    select * from pos_transactions
+    union all
+    select * from marketplace_transactions
 )
 
 select
@@ -10,5 +20,5 @@ select
     sum(quantity) as total_units,
     sum(total_amount) as basket_spend,
     count(distinct product_category) as distinct_categories_count
-from transactions
+from all_transactions
 group by basket_id, customer_id

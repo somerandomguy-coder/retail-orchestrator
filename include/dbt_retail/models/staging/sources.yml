@@ -1,9 +1,14 @@
-# include/dbt_retail/models/staging/sources.yml
 version: 2
 
 sources:
   - name: landing
-    meta:
-      external_location: "/usr/local/airflow/include/data/raw/transactions_*.parquet"
+    description: "Raw landed transaction Parquet files from retail ingestion channels."
     tables:
-      - name: raw_transactions
+      - name: pos_transactions
+        description: "Point-of-Sale in-store transactions from physical retail registers."
+        meta:
+          external_location: "{{ env_var('RAW_DATA_DIR', '/usr/local/airflow/include/data/raw') }}/pos_transactions_*.parquet"
+      - name: marketplace_transactions
+        description: "Third-party partner marketplace transactions feed (unvetted raw partner extract)."
+        meta:
+          external_location: "{{ env_var('RAW_DATA_DIR', '/usr/local/airflow/include/data/raw') }}/marketplace_transactions_*.parquet"

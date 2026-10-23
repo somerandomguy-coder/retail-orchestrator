@@ -1,12 +1,46 @@
 version: 2
 
 models:
-  - name: stg_transactions
+  - name: stg_pos_transactions
+    description: "Standardized in-store Point-of-Sale transactions from physical registers."
     columns:
       - name: transaction_id
+        description: "Primary key for in-store transactions."
         tests:
           - unique
           - not_null
       - name: customer_id
+        description: "Identifier for the retail customer."
         tests:
           - not_null
+      - name: product_category
+        description: "Standardized merchandise category."
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['Snacks', 'Dairy', 'Produce', 'Beverages', 'Bakery']
+      - name: channel
+        description: "Origination channel indicator."
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['POS']
+
+  - name: stg_marketplace_transactions
+    description: "Standardized transactions ingested from third-party marketplace partners."
+    columns:
+      - name: transaction_id
+        description: "Partner transaction key (subject to duplicate validation)."
+        tests:
+          - unique
+          - not_null
+      - name: customer_id
+        description: "Customer key (subject to guest-checkout null validation)."
+        tests:
+          - not_null
+      - name: channel
+        description: "Origination channel indicator."
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['MARKETPLACE']

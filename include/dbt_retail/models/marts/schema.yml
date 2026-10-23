@@ -1,0 +1,42 @@
+version: 2
+
+models:
+  - name: int_customer_baskets
+    description: "Basket-level aggregation calculating units, total spend, and item diversity."
+    columns:
+      - name: basket_id
+        description: "Primary identifier for the customer checkout basket."
+        tests:
+          - not_null
+      - name: customer_id
+        description: "Customer who placed the basket."
+        tests:
+          - not_null
+
+  - name: fct_customer_loyalty
+    description: "Customer lifetime value and loyalty segmentation fact table."
+    columns:
+      - name: customer_id
+        description: "Primary key for customer loyalty profile."
+        tests:
+          - unique
+          - not_null
+      - name: loyalty_segment
+        description: "Assigned customer tier based on lifetime spend and basket frequency."
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['Platinum', 'Gold', 'Silver', 'Bronze']
+
+  - name: dim_products
+    description: "Product dimension table with category classifications and pricing statistics."
+    columns:
+      - name: product_id
+        description: "Unique product identifier."
+        tests:
+          - unique
+          - not_null
+      - name: product_category
+        description: "Merchandise category."
+        tests:
+          - not_null
