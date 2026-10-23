@@ -71,8 +71,9 @@ This pipeline orchestrates multi-channel retail transaction ingestion and transf
     tags=["retail", "dbt", "cosmos", "data-quality"],
     default_args={
         "retries": 1,
-        "retry_delay": timedelta(seconds=30),
+        "retry_delay": timedelta(seconds=15),
         "execution_timeout": timedelta(minutes=10),
+        "pool": "dbt_pool",
         "on_failure_callback": pipeline_failure_alert,
     },
     doc_md=DAG_DOCS,

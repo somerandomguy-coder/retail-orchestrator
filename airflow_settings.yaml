@@ -8,8 +8,8 @@ airflow:
       conn_extra: {}
   pools:
     - pool_name: dbt_pool
-      pool_slot: 4
-      pool_description: "Dedicated execution pool for dbt transformations"
+      pool_slot: 1
+      pool_description: "Dedicated serialized pool for DuckDB single-writer concurrency control"
   variables:
     - variable_name: retail_raw_dir
       variable_value: "/usr/local/airflow/include/data/raw"
