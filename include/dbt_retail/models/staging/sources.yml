@@ -1,0 +1,9 @@
+# include/dbt_retail/models/staging/sources.yml
+version: 2
+
+sources:
+  - name: landing
+    meta:
+      external_location: "/usr/local/airflow/include/data/raw/transactions_*.parquet"
+    tables:
+      - name: raw_transactions
