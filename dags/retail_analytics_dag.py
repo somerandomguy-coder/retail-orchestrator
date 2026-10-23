@@ -1,8 +1,13 @@
 from datetime import datetime, timedelta
 import logging
 from pathlib import Path
-from airflow.decorators import dag, task
-from airflow.datasets import Dataset
+
+try:
+    from airflow.sdk import dag, task, Asset
+except ImportError:
+    from airflow.decorators import dag, task
+    from airflow.datasets import Dataset as Asset
+
 from cosmos import DbtTaskGroup, ProjectConfig, ProfileConfig, ExecutionConfig, RenderConfig
 from cosmos.constants import TestBehavior
 from cosmos.profiles import DuckDBUserPasswordProfileMapping
@@ -12,7 +17,7 @@ AIRFLOW_HOME = Path("/usr/local/airflow")
 DBT_PROJECT_PATH = AIRFLOW_HOME / "include" / "dbt_retail"
 DUCKDB_FILE_PATH = AIRFLOW_HOME / "include" / "data" / "retail.duckdb"
 RAW_DATA_PATH = AIRFLOW_HOME / "include" / "data" / "raw"
-RETAIL_DATASET = Dataset("duckdb://include/data/retail.duckdb")
+RETAIL_ASSET = Asset("duckdb://include/data/retail.duckdb")
 
 logger = logging.getLogger("airflow.task")
 
@@ -74,7 +79,7 @@ This pipeline orchestrates multi-channel retail transaction ingestion and transf
 )
 def retail_pipeline():
 
-    @task(outlets=[RETAIL_DATASET])
+    @task(outlets=[RETAIL_ASSET])
     def generate_daily_batch() -> dict:
         """Verify and ingest multi-source landing batches (POS & Marketplace).
 
